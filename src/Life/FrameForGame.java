@@ -13,12 +13,12 @@ public class FrameForGame extends JPanel{
     JPanel panelForButtons;
     JButton selectForm;
     JButton buttonStop;
-    Cursor cursor = new Cursor(12);
+    Cursor cursor = new Cursor(Cursor.HAND_CURSOR);
 
     int sizeOfArray = 50;
     int WIDTH = 1000, HEIGHT = 800;
-    boolean isCellsAlive[][];
-    JPanel oneCell[][];
+    boolean[][] isCellsAlive;
+    JPanel[][] oneCell;
 
     public FrameForGame() {
         frame = new JFrame("Game of Life(Moskaliuk CS21)");
@@ -59,18 +59,15 @@ public class FrameForGame extends JPanel{
             }
         }
 
-        selectForm.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if("Glider".equalsIgnoreCase(String.valueOf(selectForm.getText()))){
-                    selectForm.setText("One cell");
-                } else if("One cell".equalsIgnoreCase(String.valueOf(selectForm.getText()))){
-                    selectForm.setText("3 cells");
-                } else if("3 cells".equalsIgnoreCase(String.valueOf(selectForm.getText()))){
-                    selectForm.setText("12 cells");
-                } else if("12 cells".equalsIgnoreCase(String.valueOf(selectForm.getText()))){
-                    selectForm.setText("Glider");
-                }
+        selectForm.addActionListener(e -> {
+            if("Glider".equalsIgnoreCase(String.valueOf(selectForm.getText()))){
+                selectForm.setText("One cell");
+            } else if("One cell".equalsIgnoreCase(String.valueOf(selectForm.getText()))){
+                selectForm.setText("3 cells");
+            } else if("3 cells".equalsIgnoreCase(String.valueOf(selectForm.getText()))){
+                selectForm.setText("12 cells");
+            } else if("12 cells".equalsIgnoreCase(String.valueOf(selectForm.getText()))){
+                selectForm.setText("Glider");
             }
         });
 
@@ -80,7 +77,6 @@ public class FrameForGame extends JPanel{
                 super.mouseClicked(e);
                 int x = (int) ((e.getX() - 10)/14.1);
                 int y = (e.getY() - 40)/14;
-                System.out.println("getY = " + e.getY() + "and" + y + "getX = " + e.getX() + " and " + x);
                 if("One cell".equalsIgnoreCase(String.valueOf(selectForm.getText()))) {
                     if (isCellsAlive[y][x]) {
                         oneCell[y][x].setBackground(Color.white);
@@ -167,50 +163,44 @@ public class FrameForGame extends JPanel{
             }
         });
 
-        Timer timer = new Timer(100, new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                boolean[][] temp = new boolean[sizeOfArray][70];
-                for (int i = 0; i < sizeOfArray; i++) {
-                    for (int j = 0; j < 70; j++) {
-                        int count = countNeighbours(i, j);
-                        if (isCellsAlive[i][j]) {
-                            if (count < 2) {
-                                temp[i][j] = false;
-                                oneCell[i][j].setBackground(Color.white);
-                            }
-                            if (count == 3 || count == 2) {
-                                temp[i][j] = true;
-                                oneCell[i][j].setBackground(Color.black);
-                            }
-                            if (count > 3) {
-                                temp[i][j] = false;
-                                oneCell[i][j].setBackground(Color.white);
-                            }
-                        } else {
-                            if (count == 3) {
-                                temp[i][j] = true;
-                                oneCell[i][j].setBackground(Color.black);
-                            }
+        Timer timer = new Timer(100, e -> {
+            boolean[][] temp = new boolean[sizeOfArray][70];
+            for (int i = 0; i < sizeOfArray; i++) {
+                for (int j = 0; j < 70; j++) {
+                    int count = countNeighbours(i, j);
+                    if (isCellsAlive[i][j]) {
+                        if (count < 2) {
+                            temp[i][j] = false;
+                            oneCell[i][j].setBackground(Color.white);
+                        }
+                        if (count == 3 || count == 2) {
+                            temp[i][j] = true;
+                            oneCell[i][j].setBackground(Color.black);
+                        }
+                        if (count > 3) {
+                            temp[i][j] = false;
+                            oneCell[i][j].setBackground(Color.white);
+                        }
+                    } else {
+                        if (count == 3) {
+                            temp[i][j] = true;
+                            oneCell[i][j].setBackground(Color.black);
                         }
                     }
                 }
-                isCellsAlive = temp;
             }
+            isCellsAlive = temp;
         });
 
         timer.start();
 
-        buttonStop.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if("Stop".equalsIgnoreCase(String.valueOf(buttonStop.getText()))){
-                    timer.stop();
-                    buttonStop.setText("Start");
-                } else {
-                    timer.start();
-                    buttonStop.setText("Stop");
-                }
+        buttonStop.addActionListener(e -> {
+            if("Stop".equalsIgnoreCase(String.valueOf(buttonStop.getText()))){
+                timer.stop();
+                buttonStop.setText("Start");
+            } else {
+                timer.start();
+                buttonStop.setText("Stop");
             }
         });
 
@@ -231,7 +221,7 @@ public class FrameForGame extends JPanel{
                     if (isCellsAlive[i][j]) {
                         count++;
                     }
-                } catch (Exception e) {
+                } catch (Exception ignored) {
 
                 }
             }
