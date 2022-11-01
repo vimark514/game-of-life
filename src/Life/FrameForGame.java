@@ -13,41 +13,45 @@ public class FrameForGame extends JPanel{
     JPanel panelForButtons;
     JButton selectForm;
     JButton buttonStop;
+    Cursor cursor = new Cursor(12);
 
     int sizeOfArray = 50;
-    int WIDTH = 800, HEIGHT = 800;
+    int WIDTH = 1000, HEIGHT = 800;
     boolean isCellsAlive[][];
     JPanel oneCell[][];
 
     public FrameForGame() {
         frame = new JFrame("Game of Life(Moskaliuk CS21)");
-        isCellsAlive = new boolean[sizeOfArray][sizeOfArray];
-        oneCell = new JPanel[sizeOfArray][sizeOfArray];
+        isCellsAlive = new boolean[sizeOfArray][70];
+        oneCell = new JPanel[sizeOfArray][70];
 
         panel = new JPanel();
         panel.setSize(WIDTH, HEIGHT);
         panel.setBackground(Color.black);
-        panel.setBorder(BorderFactory.createLineBorder(Color.darkGray));
-        panel.setLayout(new GridLayout(sizeOfArray, sizeOfArray));
+        panel.setBorder(BorderFactory.createLineBorder(Color.black));
+        panel.setLayout(new GridLayout(sizeOfArray, 70));
 
         panelForButtons = new JPanel();
-        panelForButtons.setBackground(Color.BLACK);
+        panelForButtons.setBackground(Color.black);
 
         buttonStop = new JButton("Stop");
         selectForm = new JButton("One cell");
+
+        buttonStop.setCursor(cursor);
+        selectForm.setCursor(cursor);
 
         panelForButtons.add(selectForm);
         panelForButtons.add(buttonStop);
 
         for (int i = 0; i < sizeOfArray; i++) {
-            for (int j = 0; j < sizeOfArray; j++) {
-                isCellsAlive[i][j] = random.nextInt(100) < 30;
+            for (int j = 0; j < 70; j++) {
+                isCellsAlive[i][j] = random.nextInt(150) < 70;
                 JPanel temp = new JPanel();
                 if (isCellsAlive[i][j]) {
-                    temp.setBackground(Color.white);
+                    temp.setBackground(Color.black);
                     temp.setBorder(BorderFactory.createLineBorder(Color.darkGray));
                 } else {
-                    temp.setBackground(Color.black);
+                    temp.setBackground(Color.white);
                     temp.setBorder(BorderFactory.createLineBorder(Color.darkGray));
                 }
                 panel.add(temp);
@@ -74,24 +78,22 @@ public class FrameForGame extends JPanel{
             @Override
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
-                int x = (e.getX() - 25)/15;
-                int y = (e.getY() - 80)/14;
+                int x = (int) ((e.getX() - 10)/14.1);
+                int y = (e.getY() - 40)/14;
+                System.out.println("getY = " + e.getY() + "and" + y + "getX = " + e.getX() + " and " + x);
                 if("One cell".equalsIgnoreCase(String.valueOf(selectForm.getText()))) {
                     if (isCellsAlive[y][x]) {
-                        oneCell[y][x].setBackground(Color.black);
-                        oneCell[y][x].setBorder(BorderFactory.createLineBorder(Color.darkGray));
+                        oneCell[y][x].setBackground(Color.white);
                         isCellsAlive[y][x] = false;
                     } else {
-                        oneCell[y][x].setBackground(Color.white);
-                        oneCell[y][x].setBorder(BorderFactory.createLineBorder(Color.darkGray));
+                        oneCell[y][x].setBackground(Color.black);
                         isCellsAlive[y][x] = true;
                     }
                 } else if("3 cells".equalsIgnoreCase(String.valueOf(selectForm.getText()))) {
                     int i = y - 1;
                     while (i < y + 2) {
                         if (i < 50 && i >= 0) {
-                            oneCell[i][x].setBackground(Color.white);
-                            oneCell[i][x].setBorder(BorderFactory.createLineBorder(Color.darkGray));
+                            oneCell[i][x].setBackground(Color.black);
                             isCellsAlive[i][x] = true;
                         }
                         i++;
@@ -102,26 +104,22 @@ public class FrameForGame extends JPanel{
                     while(i < y + 4) {
                         if(i < 50 && i >= 0) {
                             if (i == y) {
-                                oneCell[i][x].setBackground(Color.black);
-                                oneCell[i][x].setBorder(BorderFactory.createLineBorder(Color.darkGray));
+                                oneCell[i][x].setBackground(Color.white);
                                 isCellsAlive[i][x] = false;
                             } else {
-                                oneCell[i][x].setBackground(Color.white);
-                                oneCell[i][x].setBorder(BorderFactory.createLineBorder(Color.darkGray));
+                                oneCell[i][x].setBackground(Color.black);
                                 isCellsAlive[i][x] = true;
                             }
                         }
                         i++;
                     }
                     while(j < x + 4) {
-                        if(j < 50 && j >= 0) {
+                        if(j < 70 && j >= 0) {
                             if (j == x) {
-                                oneCell[y][j].setBackground(Color.black);
-                                oneCell[y][j].setBorder(BorderFactory.createLineBorder(Color.darkGray));
+                                oneCell[y][j].setBackground(Color.white);
                                 isCellsAlive[y][j] = false;
                             } else {
-                                oneCell[y][j].setBackground(Color.white);
-                                oneCell[y][j].setBorder(BorderFactory.createLineBorder(Color.darkGray));
+                                oneCell[y][j].setBackground(Color.black);
                                 isCellsAlive[y][j] = true;
                             }
                         }
@@ -130,42 +128,36 @@ public class FrameForGame extends JPanel{
                 } else if("Glider".equalsIgnoreCase(String.valueOf(selectForm.getText()))) {
                     int vertical = random.nextInt(1, 3);
                     int horizontal = random.nextInt(1, 3);
-                    if ((x >= 2 && x <= 47) && (y >= 2 && y <= 47)) {
+                    if ((x >= 2 && x <= 67) && (y >= 2 && y <= 47)) {
                         if (vertical == 1) {
                             for (int i = y; i >= y - 2; i--) {
-                                oneCell[i][x].setBackground(Color.white);
-                                oneCell[i][x].setBorder(BorderFactory.createLineBorder(Color.darkGray));
+                                oneCell[i][x].setBackground(Color.black);
                                 isCellsAlive[i][x] = true;
                             }
                             if (horizontal == 1) {
                                 for (int j = 0; j < 2; j++) {
-                                    oneCell[y - j][x - 1 - j].setBackground(Color.white);
-                                    oneCell[y - j][x - 1 - j].setBorder(BorderFactory.createLineBorder(Color.darkGray));
+                                    oneCell[y - j][x - 1 - j].setBackground(Color.black);
                                     isCellsAlive[y - j][x - 1 - j] = true;
                                 }
                             } else {
                                 for (int j = 0; j < 2; j++) {
-                                    oneCell[y - j][x + 1 + j].setBackground(Color.white);
-                                    oneCell[y - j][x + 1 + j].setBorder(BorderFactory.createLineBorder(Color.darkGray));
+                                    oneCell[y - j][x + 1 + j].setBackground(Color.black);
                                     isCellsAlive[y - j][x + 1 + j] = true;
                                 }
                             }
                         } else {
                             for (int i = y; i <= y + 2; i++) {
-                                oneCell[i][x].setBackground(Color.white);
-                                oneCell[i][x].setBorder(BorderFactory.createLineBorder(Color.darkGray));
+                                oneCell[i][x].setBackground(Color.black);
                                 isCellsAlive[i][x] = true;
                             }
                             if (horizontal == 1) {
                                 for (int j = 0; j < 2; j++) {
-                                    oneCell[y + j][x - 1 - j].setBackground(Color.white);
-                                    oneCell[y + j][x - 1 - j].setBorder(BorderFactory.createLineBorder(Color.darkGray));
+                                    oneCell[y + j][x - 1 - j].setBackground(Color.black);
                                     isCellsAlive[y + j][x - 1 - j] = true;
                                 }
                             } else {
                                 for (int j = 0; j < 2; j++) {
-                                    oneCell[y + j][x + 1 + j].setBackground(Color.white);
-                                    oneCell[y + j][x + 1 + j].setBorder(BorderFactory.createLineBorder(Color.darkGray));
+                                    oneCell[y + j][x + 1 + j].setBackground(Color.black);
                                     isCellsAlive[y + j][x + 1 + j] = true;
                                 }
                             }
@@ -178,27 +170,27 @@ public class FrameForGame extends JPanel{
         Timer timer = new Timer(100, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                boolean[][] temp = new boolean[sizeOfArray][sizeOfArray];
+                boolean[][] temp = new boolean[sizeOfArray][70];
                 for (int i = 0; i < sizeOfArray; i++) {
-                    for (int j = 0; j < sizeOfArray; j++) {
+                    for (int j = 0; j < 70; j++) {
                         int count = countNeighbours(i, j);
                         if (isCellsAlive[i][j]) {
                             if (count < 2) {
                                 temp[i][j] = false;
-                                oneCell[i][j].setBackground(Color.black);
+                                oneCell[i][j].setBackground(Color.white);
                             }
                             if (count == 3 || count == 2) {
                                 temp[i][j] = true;
-                                oneCell[i][j].setBackground(Color.white);
+                                oneCell[i][j].setBackground(Color.black);
                             }
                             if (count > 3) {
                                 temp[i][j] = false;
-                                oneCell[i][j].setBackground(Color.black);
+                                oneCell[i][j].setBackground(Color.white);
                             }
                         } else {
                             if (count == 3) {
                                 temp[i][j] = true;
-                                oneCell[i][j].setBackground(Color.white);
+                                oneCell[i][j].setBackground(Color.black);
                             }
                         }
                     }
@@ -223,7 +215,7 @@ public class FrameForGame extends JPanel{
         });
 
         frame.add(panel);
-        frame.add(panelForButtons, BorderLayout.PAGE_START);
+        frame.add(panelForButtons, BorderLayout.PAGE_END);
         frame.setSize(WIDTH, HEIGHT);
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
