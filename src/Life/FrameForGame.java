@@ -1,7 +1,6 @@
 package Life;
 
 import javax.swing.*;
-import javax.swing.plaf.ButtonUI;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
@@ -179,7 +178,7 @@ public class FrameForGame extends JPanel{
                 buttonClear.setText("Clear");
                 for (int i = 0; i < sizeOfY; i++) {
                     for (int j = 0; j < sizeOfX; j++) {
-                        isCellsAlive[i][j] = random.nextInt(150) < 70;
+                        isCellsAlive[i][j] = random.nextInt(0, 150) < 70;
                         JPanel temp = new JPanel();
                         if (isCellsAlive[i][j]) {
                             temp.setBackground(Color.yellow);
